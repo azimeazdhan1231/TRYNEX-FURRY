@@ -1,0 +1,311 @@
+# TryneX Lifestyle - Netlify Configuration
+
+[build]
+  # Build settings
+  command = "echo 'Static site - no build required'"
+  publish = "."
+  
+  # Environment variables for build
+  environment = { NODE_ENV = "production" }
+
+[build.processing]
+  skip_processing = false
+
+[build.processing.css]
+  bundle = true
+  minify = true
+
+[build.processing.js]
+  bundle = false
+  minify = true
+
+[build.processing.html]
+  pretty_urls = true
+
+[build.processing.images]
+  compress = true
+
+# Netlify Functions
+[[functions]]
+  directory = "netlify/functions"
+
+# Headers for security and performance
+[[headers]]
+  for = "/*"
+  [headers.values]
+    # Security headers
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+    Content-Security-Policy = "default-src 'self'; script-src 'self' 'unsafe-inline' 'unsafe-eval' https://cdnjs.cloudflare.com https://unpkg.com https://identity.netlify.com; style-src 'self' 'unsafe-inline' https://cdnjs.cloudflare.com https://fonts.googleapis.com; font-src 'self' https://fonts.gstatic.com https://cdnjs.cloudflare.com; img-src 'self' data: https: blob:; media-src 'self' https:; object-src 'none'; frame-src 'self' https://identity.netlify.com; connect-src 'self' https://wifsqonbnfmwtqvupqbk.supabase.co https://api.netlify.com wss:; worker-src 'self' blob:"
+    
+    # Performance headers
+    Cache-Control = "public, max-age=31536000, immutable"
+
+# Specific headers for assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+
+[[headers]]
+  for = "*.css"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "text/css"
+
+[[headers]]
+  for = "*.js"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "application/javascript"
+
+[[headers]]
+  for = "*.woff2"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000, immutable"
+    Content-Type = "font/woff2"
+
+# HTML files - shorter cache for content updates
+[[headers]]
+  for = "*.html"
+  [headers.values]
+    Cache-Control = "public, max-age=300"
+    Content-Type = "text/html; charset=UTF-8"
+
+# API endpoints headers
+[[headers]]
+  for = "/api/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
+
+# Netlify Functions headers
+[[headers]]
+  for = "/.netlify/functions/*"
+  [headers.values]
+    Access-Control-Allow-Origin = "*"
+    Access-Control-Allow-Methods = "GET, POST, PUT, DELETE, OPTIONS"
+    Access-Control-Allow-Headers = "Content-Type, Authorization, X-Requested-With"
+
+# Redirects and rewrites
+[[redirects]]
+  # Admin redirect to Netlify CMS
+  from = "/admin"
+  to = "/admin/index.html"
+  status = 200
+
+# Single Page Application support
+[[redirects]]
+  # Handle client-side routing for product pages
+  from = "/product"
+  to = "/product.html"
+  status = 200
+
+[[redirects]]
+  # Handle query parameters for product pages
+  from = "/product/*"
+  to = "/product.html"
+  status = 200
+
+[[redirects]]
+  # Handle category filtering
+  from = "/category/*"
+  to = "/products.html"
+  status = 200
+
+# Legacy URL redirects
+[[redirects]]
+  from = "/shop"
+  to = "/products.html"
+  status = 301
+
+[[redirects]]
+  from = "/shop/*"
+  to = "/products.html"
+  status = 301
+
+[[redirects]]
+  from = "/design"
+  to = "/custom-design.html"
+  status = 301
+
+[[redirects]]
+  from = "/customize"
+  to = "/custom-design.html"
+  status = 301
+
+[[redirects]]
+  from = "/track"
+  to = "/track-order.html"
+  status = 301
+
+[[redirects]]
+  from = "/tracking"
+  to = "/track-order.html"
+  status = 301
+
+# Contact page redirects
+[[redirects]]
+  from = "/support"
+  to = "/contact.html"
+  status = 301
+
+[[redirects]]
+  from = "/help"
+  to = "/contact.html"
+  status = 301
+
+# WhatsApp redirect
+[[redirects]]
+  from = "/whatsapp"
+  to = "https://wa.me/8801747292277"
+  status = 302
+
+# Social media redirects (placeholder - update with actual URLs)
+[[redirects]]
+  from = "/facebook"
+  to = "https://facebook.com/trynexlifestyle"
+  status = 302
+
+[[redirects]]
+  from = "/instagram"
+  to = "https://instagram.com/trynexlifestyle"
+  status = 302
+
+# Sitemap and robots
+[[redirects]]
+  from = "/sitemap"
+  to = "/sitemap.xml"
+  status = 200
+
+# 404 page
+[[redirects]]
+  from = "/*"
+  to = "/404.html"
+  status = 404
+
+# Netlify Identity settings
+[context.production]
+  command = "echo 'Production build'"
+  
+[context.production.environment]
+  NODE_ENV = "production"
+  SITE_URL = "https://trynex-lifestyle.netlify.app"
+
+[context.deploy-preview]
+  command = "echo 'Deploy preview'"
+
+[context.branch-deploy]
+  command = "echo 'Branch deploy'"
+
+# Form handling
+[forms]
+  # Contact form settings
+  contact = true
+
+# Edge functions (if needed in the future)
+# [[edge_functions]]
+#   function = "geolocation"
+#   path = "/api/location"
+
+# Plugin settings
+[[plugins]]
+  package = "@netlify/plugin-sitemap"
+  
+  [plugins.inputs]
+    buildDir = "."
+    exclude = [
+      "/admin/**",
+      "/assets/images/uploads/**",
+      "/.netlify/**"
+    ]
+
+# Environment-specific redirects
+[context.production]
+  [[context.production.redirects]]
+    from = "/admin/*"
+    to = "/admin/index.html"
+    status = 200
+    force = true
+    
+    [context.production.redirects.headers]
+      X-Robots-Tag = "noindex"
+
+# Development context
+[context.dev]
+  command = "echo 'Development build'"
+  
+  [context.dev.environment]
+    NODE_ENV = "development"
+    DEBUG = "true"
+
+# Branch-specific settings for staging
+[context.staging]
+  command = "echo 'Staging build'"
+  
+  [context.staging.environment]
+    NODE_ENV = "staging"
+
+# Custom error pages
+[template.environment]
+  CUSTOM_LOGO = "https://your-logo-url.com/logo.png"
+
+# Performance optimizations
+[build.environment]
+  # Enable faster builds
+  NETLIFY_USE_ESBUILD = "true"
+  NETLIFY_EXPERIMENTAL_BUILD_CACHE = "true"
+
+# Security settings
+[build.ignore]
+  # Ignore build if only these files changed
+  command = "git diff --quiet $CACHED_COMMIT_REF $COMMIT_REF -- README.md DEPLOYMENT_GUIDE.md"
+
+# Analytics (optional)
+# [analytics]
+#   provider = "netlify"
+#   enabled = true
+
+# Large Media (if using large assets)
+# [lfs]
+#   enabled = true
+
+# Comments
+# Enable this if you want to use Netlify's comment system
+# [comments]
+#   enabled = false
+[build]
+  publish = "."
+  command = "echo 'No build command needed for static site'"
+
+[build.environment]
+  NODE_VERSION = "18"
+
+[[redirects]]
+  from = "/api/*"
+  to = "/.netlify/functions/:splat"
+  status = 200
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+  conditions = {Role = ["admin"]}
+
+# Headers for security
+[[headers]]
+  for = "/*"
+  [headers.values]
+    X-Frame-Options = "DENY"
+    X-XSS-Protection = "1; mode=block"
+    X-Content-Type-Options = "nosniff"
+    Referrer-Policy = "strict-origin-when-cross-origin"
+
+# Cache static assets
+[[headers]]
+  for = "/assets/*"
+  [headers.values]
+    Cache-Control = "public, max-age=31536000"
