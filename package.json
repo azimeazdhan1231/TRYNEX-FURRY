@@ -1,15 +1,24 @@
 {
-  "name": "workspace",
+  "name": "trynex-lifestyle",
   "version": "1.0.0",
-  "description": "[![Netlify Status](https://api.netlify.com/api/v1/badges/your-badge-id/deploy-status)](https://app.netlify.com/sites/your-site-name/deploys)",
-  "main": "index.js",
+  "description": "TryneX Lifestyle E-commerce Platform - Premium custom gifts and lifestyle products",
+  "main": "index.html",
   "scripts": {
-    "test": "echo \"Error: no test specified\" && exit 1"
+    "build": "./build.sh",
+    "test": "echo \"Error: no test specified\" && exit 1",
+    "dev": "npx http-server . -p 8888",
+    "postinstall": "echo 'Dependencies installed successfully'"
   },
-  "keywords": [],
-  "author": "",
-  "license": "ISC",
+  "keywords": ["ecommerce", "custom-gifts", "lifestyle", "netlify"],
+  "author": "TryneX Lifestyle",
+  "license": "MIT",
   "dependencies": {
-    "nodemailer": "^7.0.5"
+    "nodemailer": "^6.9.8"
+  },
+  "devDependencies": {
+    "@netlify/plugin-sitemap": "^0.8.1"
+  },
+  "engines": {
+    "node": ">=18.0.0"
   }
 }
