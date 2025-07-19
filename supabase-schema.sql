@@ -19,7 +19,6 @@ CREATE TABLE IF NOT EXISTS orders (
 CREATE TABLE IF NOT EXISTS products (
     id SERIAL PRIMARY KEY,
     title VARCHAR(255) NOT NULL,
-    title_bn VARCHAR(255),
     price DECIMAL(10,2) NOT NULL,
     original_price DECIMAL(10,2),
     category VARCHAR(50) NOT NULL,
@@ -39,7 +38,6 @@ CREATE TABLE IF NOT EXISTS products (
 CREATE TABLE IF NOT EXISTS categories (
     id SERIAL PRIMARY KEY,
     name VARCHAR(255) NOT NULL,
-    name_bn VARCHAR(255),
     slug VARCHAR(255) UNIQUE NOT NULL,
     description TEXT,
     image TEXT,
@@ -53,8 +51,7 @@ CREATE TABLE IF NOT EXISTS custom_designs (
     order_id VARCHAR(50),
     design_data JSONB NOT NULL,
     image_url TEXT,
-    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW(),
-    FOREIGN KEY (order_id) REFERENCES orders(order_id)
+    created_at TIMESTAMP WITH TIME ZONE DEFAULT NOW()
 );
 
 -- Enable Row Level Security
@@ -72,9 +69,9 @@ CREATE POLICY "Allow public insert on orders" ON orders FOR INSERT WITH CHECK (t
 CREATE POLICY "Allow admin read on orders" ON orders FOR SELECT USING (auth.role() = 'authenticated');
 
 -- Insert sample data
-INSERT INTO categories (name, name_bn, slug, description, featured) VALUES
-('Mugs', 'মগ', 'mugs', 'Custom printed mugs', true),
-('T-Shirts', 'টি-শার্ট', 't-shirts', 'Custom designed t-shirts', true),
-('Bottles', 'বোতল', 'bottles', 'Water bottles and tumblers', false),
-('Keychains', 'চাবির রিং', 'keychains', 'Personalized keychains', false),
-('Gifts', 'উপহার', 'gifts', 'Custom gift items', true);
+INSERT INTO categories (name, slug, description, featured) VALUES
+('Mugs', 'mugs', 'Custom printed mugs', true),
+('T-Shirts', 't-shirts', 'Custom designed t-shirts', true),
+('Bottles', 'bottles', 'Water bottles and tumblers', false),
+('Keychains', 'keychains', 'Personalized keychains', false),
+('Gifts', 'gifts', 'Custom gift items', true);
